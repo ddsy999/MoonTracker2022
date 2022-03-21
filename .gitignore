@@ -105,7 +105,10 @@ celerybeat.pid
 .env
 .venv
 env/
-venv/
+venv/__pycache__
+venv/Include
+venv/Scripts
+venv/Lib
 ENV/
 env.bak/
 venv.bak/
@@ -127,3 +130,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# gitignore
+gitignore_*
