@@ -20,19 +20,19 @@ import os
 
 from functions import *
 
-f = open("venv/gitignore_VideoCaptureIP.txt",'r')
+f = open("gitignore_VideoCaptureIP.txt",'r')
 VideoCaptureIP_ = f.readline()
 f.close()
 
-f = open("venv/gitignore_EV3IP.txt",'r')
+f = open("gitignore_EV3IP.txt",'r')
 EV3IP_ = f.readline()
 f.close()
 
-f = open("venv/gitignore_Dropbox_appkey.txt",'r')
+f = open("gitignore_Dropbox_appkey.txt",'r')
 Dropbox_appkey_ = f.readline()
 f.close()
 
-f = open("venv/gitignore_Dropbox_token.txt",'r')
+f = open("gitignore_Dropbox_token.txt",'r')
 Dropbox_token_ = f.readline()
 f.close()
 
