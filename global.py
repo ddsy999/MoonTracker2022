@@ -125,7 +125,7 @@ try:
     conn = rpyc.classic.connect( EV3IP_ , port=RPYC_SERVER_PORT)
     ev3 = conn.modules['ev3dev.ev3'] # import ev3dev.ev3 remotely
     m_updown = ev3.LargeMotor('outA')
-    m_leftright = ev3.LargeMotor('outB')
+    m_leftright = ev3.Motor('outB')
     ev3_screen = ev3.Screen()
     ev3_screen.draw.text((30,30),"Connect")
     ev3_screen.update()
@@ -245,6 +245,7 @@ while True:
 
 capture.release()
 cv2.destroyAllWindows()
+
 
 
 
