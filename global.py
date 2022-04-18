@@ -1,17 +1,10 @@
 
 
-
-
-import paramiko
-import getpass
-
-
-
-
-#python3 /usr/local/bin/rpyc_classic.py -m threaded --host 0.0.0.0
-
 import cv2
 import numpy as np
+import paramiko
+import getpass
+import cv2
 from time import sleep
 import rpyc
 import datetime
@@ -36,6 +29,7 @@ f = open("gitignore_Dropbox_token.txt",'r')
 Dropbox_token_ = f.readline()
 f.close()
 
+RPYC_SERVER_PORT = 18812
 
 
 cli = paramiko.SSHClient()
@@ -92,7 +86,6 @@ Object_y = 0
 ObjectExist = 0
 tictic = 0
 ev3connect = 0 # 0 is not conn / 1 is conn
-RPYC_SERVER_PORT = 18812
 previous_second = -1
 
 
@@ -138,6 +131,7 @@ try:
 except:
     print("EV3 Err")
     ev3connect = 0
+
 
 
 
