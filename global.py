@@ -1,4 +1,6 @@
 
+# opencv-python     4.5.4.60
+
 
 import cv2
 import numpy as np
@@ -89,9 +91,8 @@ ev3connect = 0 # 0 is not conn / 1 is conn
 previous_second = -1
 
 
-
-
-capture = cv2.VideoCapture(VideoCaptureIP_)
+capture = cv2.VideoCapture('rtsp://js:aaa@192.168.0.177:5554/sss')
+#capture = cv2.VideoCapture(VideoCaptureIP_)
 
 
 
@@ -239,6 +240,7 @@ while True:
 
 capture.release()
 cv2.destroyAllWindows()
+
 
 
 

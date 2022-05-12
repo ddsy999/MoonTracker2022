@@ -1,6 +1,6 @@
 
 
-def ev3_connect():
+class ev3_connect():
     import rpyc
     
     global conn

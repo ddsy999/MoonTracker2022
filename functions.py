@@ -10,6 +10,7 @@ def stackImages(imgArray,scale,lables=[]):
     sizeH = imgArray[0][0].shape[0]
     rows = len(imgArray)
     cols = len(imgArray[0])
+    
     rowsAvailable = isinstance(imgArray[0], list)
     width = imgArray[0][0].shape[1]
     height = imgArray[0][0].shape[0]
