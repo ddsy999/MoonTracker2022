@@ -15,23 +15,31 @@ import os
 
 from functions import *
 
-f = open("gitignore_VideoCaptureIP.txt",'r')
-VideoCaptureIP_ = f.readline()
-f.close()
+from constants import *
 
-f = open("gitignore_EV3IP.txt",'r')
-EV3IP_ = f.readline()
-f.close()
+from ev3_connect import *
 
-f = open("gitignore_Dropbox_appkey.txt",'r')
-Dropbox_appkey_ = f.readline()
-f.close()
 
-f = open("gitignore_Dropbox_token.txt",'r')
-Dropbox_token_ = f.readline()
-f.close()
+VideoCaptureIP_  = constants().VideoCaptureIP_
+EV3IP_           = constants().EV3IP_
+Dropbox_appkey_  = constants().Dropbox_appkey_
+Dropbox_token_   = constants().Dropbox_token_
+RPYC_SERVER_PORT = constants().RPYC_SERVER_PORT
 
-RPYC_SERVER_PORT = 18812
+
+ddd = ev3_connect(EV3IP_ , RPYC_SERVER_PORT )
+
+ddd.ev3connect
+
+ddd.ev3_screen.draw.text((30,30)," ")
+ddd.ev3_screen.update()
+
+ddd.MotorLR()
+
+
+
+ddd.ev3_sound = self.ev3.Sound()
+ddd.ev3_sound.beep()
 
 
 cli = paramiko.SSHClient()
@@ -51,32 +59,6 @@ stdin, stdout, stderr = cli.exec_command("python3 /usr/local/bin/rpyc_classic.py
 cli.close()
 
 
-def getContours(img):
-    
-    try:
-        global Object_x , Object_y , ObjectExist
-        contours , hierarchy = cv2.findContours(img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
-        for cnt in contours:
-            area = cv2.contourArea(cnt)
-            #print(area)
-            if area > 2000:
-                cv2.drawContours(imgContour , cnt , -1 , (255,0,0),3)
-                peri = cv2.arcLength(cnt,True)
-                #print(peri)
-                approx = cv2.approxPolyDP(cnt,0.02*peri,True )
-                objCor = len(approx)
-                x,y,w,h = cv2.boundingRect(approx)
-                print(['Edge', 'Width coord', 'Height coord'])
-                print([len(approx), (x + w/2) , (y + h/2)])
-                cv2.circle(imgContour,(int(x + w/2) , int(y + h/2)) ,2, (0,0,255),cv2.FILLED)
-                Object_x = (x + w/2)
-                Object_y = (y + h/2)
-                if len(approx)>=6 :
-                    ObjectExist = 1
-
-                cv2.rectangle(imgContour,(x,y),(x+w,y+h),(0,255,0),2)
-    except:
-        print("fail to getContours")
 
 
 # Variable
