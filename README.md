@@ -9,6 +9,9 @@
 * Mobility 장비 : Arduino / Lego EV3
 * Computer 장비 : Raspberry Pi
 
+* 현재 모습 (2022-06-01)
+<img width="50%" height="50%" src="[https://user-images.githubusercontent.com/23700286/155877486-7156031f-f663-4443-8772-0c189dd28be4.png](https://user-images.githubusercontent.com/23700286/172329193-bc5e28d6-85bd-4693-bde2-5ffb8543c4e7.jpg)"/>
+
 
 
 ## 계획 조감도 
