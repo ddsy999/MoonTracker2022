@@ -61,7 +61,7 @@ while True :
     img = cv2.resize(img , (Window_Width,Window_Heigth))
     # img = cv2.flip(img,0)
     # Original Image
-    cv2.imshow("livestream",img)
+    #cv2.imshow("livestream",img)
 
     imgContour = img.copy()
     imgContour = cv2.rectangle(imgContour,(int(Window_Width/2-50),int(Window_Heigth/2-50)),(int(Window_Width/2+50),int(Window_Heigth/2+50)),(0,255,0),2)
@@ -106,7 +106,7 @@ while True :
     Object_x , Object_y , ObjectExist = getContours(imgMaskCanny , imgContour)
 
 
-    cv2.imshow("Contour",imgContour)
+    #cv2.imshow("Contour",imgContour)
 
 
 
