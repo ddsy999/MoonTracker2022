@@ -9,6 +9,10 @@
 * Mobility 장비 : Arduino / Lego EV3
 * Computer 장비 : Raspberry Pi
 
+* 현재 모습 (2022-06-01)
+* 
+<img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/172329193-bc5e28d6-85bd-4693-bde2-5ffb8543c4e7.jpg"/>
+
 
 
 ## 계획 조감도 
@@ -27,12 +31,8 @@
 
 
 
-## 최신 근황
-<img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/155877178-c437f57e-0741-4931-83ef-c99b18bc0b24.gif"/>
 
-
-
-## 1단계 
+## 2022 1월
 
 
 ### 1-1 단계 : Camera의 이미지를 Computer에 연결 
@@ -45,6 +45,7 @@
 
 ### 1-2 단계 : Computer에서 물체 추적 위치 파악 , Lege EV3에 명령 송신
 
+<img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/155877178-c437f57e-0741-4931-83ef-c99b18bc0b24.gif"/>
 
 
 <img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/156370209-76f91226-2429-412a-873e-334f7d359c83.gif"/>
@@ -73,6 +74,25 @@
 
 
 <img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/156368637-f4238e7a-d293-445b-be45-0e81e42e6133.PNG"/>
+
+
+
+## 2022년 5월
+
+1. Code 수정 : 각단계 Class 화 
+2. Lego 완성 : 상하좌우 움직임 
+
+### 결과 
+
+<img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/168474425-89c763fe-0736-401a-ae2d-c4dfd3632dae.gif"/>
+
+
+<img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/168474750-73f29091-af79-4191-85ee-418f2c382e18.gif"/>
+
+
+<img width="50%" height="50%" src="https://user-images.githubusercontent.com/23700286/168476389-44a21a69-83e8-43ec-bfa8-a2f209c46747.gif"/>
+
+
 
 
 
