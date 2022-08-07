@@ -1,10 +1,47 @@
-
 import cv2
 import numpy as np
-import os
 import paramiko
+import getpass
+import cv2
+from time import sleep
+import rpyc
+import datetime
+import dropbox
+import os
 
 # functions
+
+def getContours(img , imgContour):
+    
+    try:
+        global Object_x , Object_y , ObjectExist
+        contours , hierarchy = cv2.findContours(img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+        for cnt in contours:
+            area = cv2.contourArea(cnt)
+            #print(area)
+            if area > 2000:
+                cv2.drawContours(imgContour , cnt , -1 , (255,0,0),3)
+                peri = cv2.arcLength(cnt,True)
+                #print(peri)
+                approx = cv2.approxPolyDP(cnt,0.02*peri,True )
+                objCor = len(approx)
+                x,y,w,h = cv2.boundingRect(approx)
+                x,y,w,h = int(x),int(y),int(w),int(h) 
+                #print(['Edge', 'Width coord', 'Height coord'])
+                #print([len(approx), (x + w/2) , (y + h/2)])
+                cv2.circle(imgContour,(int(x + w/2) , int(y + h/2)) ,2, (0,0,255),cv2.FILLED)
+                Object_x = (x + w/2)
+                Object_y = (y + h/2)
+                if len(approx)>=6 :
+                    ObjectExist = 1
+                return [Object_x , Object_y , 1]
+                cv2.rectangle(imgContour,((x,y),(x+w,y+h)),(0,255,0),2)
+        
+    except:
+        #print("fail to getContours")
+        return [ -1 , -1 , 0]
+    return [ -1 , -1 , 0]
+    
 def stackImages(imgArray,scale,lables=[]):
     sizeW= imgArray[0][0].shape[1]
     sizeH = imgArray[0][0].shape[0]

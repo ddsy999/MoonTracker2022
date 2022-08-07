@@ -22,28 +22,22 @@ tictic = -1
 ev3connect = 0 # 0 is not conn / 1 is conn
 previous_second = -1
 
+from functions import *
+from constants import *
 
-f = open("gitignore_VideoCaptureIP.txt",'r')
-VideoCaptureIP_ = f.readline()
-f.close()
+VideoCaptureIP_  = constants().VideoCaptureIP_
+EV3IP_           = constants().EV3IP_
+Dropbox_appkey_  = constants().Dropbox_appkey_
+Dropbox_token_   = constants().Dropbox_token_
+RPYC_SERVER_PORT = constants().RPYC_SERVER_PORT
 
-f = open("gitignore_EV3IP.txt",'r')
-EV3IP_ = f.readline()
-f.close()
 
-f = open("gitignore_Dropbox_appkey.txt",'r')
-Dropbox_appkey_ = f.readline()
-f.close()
-
-f = open("gitignore_Dropbox_token.txt",'r')
-Dropbox_token_ = f.readline()
-f.close()
-
-RPYC_SERVER_PORT = 18812
 
 #capture = cv2.VideoCapture('rtsp://js:aaa@192.168.0.177:5554/sss')
 #capture = cv2.VideoCapture(VideoCaptureIP_)
-capture = cv2.VideoCapture('https://192.168.219.200:8080/video')
+#capture = cv2.VideoCapture('https://192.168.219.200:8080/video')
+capture = cv2.VideoCapture('rtsp://192.168.0.177:5554')
+
 
 while True:
 
@@ -54,13 +48,22 @@ while True:
     current_Year, current_Month, current_Day, current_Hour, current_Minute, current_Second = current_Time.split("_")
 
     if tictic == -1 : tictic = int(current_Second)
-    elif tictic != int(current_Second) and tictic%10 == 0 : 
+    elif tictic != int(current_Second) and int(current_Second)%10 == 0 : 
         print('time ' + current_Second) 
         tictic = int(current_Second)
 
     # img Read
     _ , img = capture.read()
     img = cv2.resize(img , (Window_Width,Window_Heigth))
-    img = cv2.flip(img,0)
+    #img = cv2.flip(img,0)
     # Original Image
     cv2.imshow("livestream",img)
+    
+    # k = cv2.waitKey(0)
+    # if k == 27: # esc key
+    #     cv2.destroyAllWindow()
+    # elif k == ord('s'): # 's' key
+    #     cv2.imwrite('testgray.png',img)
+    #     cv2.destroyAllWindow()
+    if cv2.waitKey(1) == ord("q"):
+        break
