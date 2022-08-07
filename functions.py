@@ -40,7 +40,7 @@ def getContours(img , imgContour):
     except:
         #print("fail to getContours")
         return [ -1 , -1 , 0]
-    return [ -1 , -1 , 0]
+    return [ -1 , -1 , 0]    # object x , y , exist
     
 def stackImages(imgArray,scale,lables=[]):
     sizeW= imgArray[0][0].shape[1]

@@ -34,8 +34,6 @@ ddd.ev3connect
 ddd.ev3_screen.draw.text((30,30)," ")
 ddd.ev3_screen.update()
 
-ddd.MotorLR()
-
 
 
 ddd.ev3_sound = self.ev3.Sound()
@@ -73,7 +71,7 @@ ev3connect = 0 # 0 is not conn / 1 is conn
 previous_second = -1
 
 
-capture = cv2.VideoCapture('rtsp://js:aaa@192.168.0.177:5554/sss')
+capture = cv2.VideoCapture('192.168.0.108:8080')
 #capture = cv2.VideoCapture(VideoCaptureIP_)
 
 

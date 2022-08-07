@@ -5,7 +5,7 @@
 import cv2
 import numpy as np
 import paramiko
-import getpass
+#import getpass
 import cv2
 from time import sleep
 import rpyc
@@ -36,29 +36,19 @@ timeEvent                        = 1
 
 Lego = ev3_connect(EV3IP_ , RPYC_SERVER_PORT )
 
-#ddd.ev3_sound.beep()
+
+capture = cv2.VideoCapture(VideoCaptureIP_)
+#capture = cv2.VideoCapture("http://192.168.0.108:8081")
 
 
-
-
-
-
-
-
-
-#capture = cv2.VideoCapture('rtsp://js:aaa@192.168.0.177:5554/sss')
-#capture = cv2.VideoCapture(VideoCaptureIP_)
-capture = cv2.VideoCapture("http://192.168.0.108:8081")
-
-
-cv2.namedWindow("TrackBars")
-cv2.resizeWindow("TrackBars", 640 , 640)
-cv2.createTrackbar("Hue Min", "TrackBars", 0, 179, empty)
-cv2.createTrackbar("Hue Max", "TrackBars", 179, 179, empty)
-cv2.createTrackbar("Sat Min", "TrackBars", 0, 255, empty)
-cv2.createTrackbar("Sat Max", "TrackBars", 255, 255, empty)
-cv2.createTrackbar("Val Min", "TrackBars", 0, 255, empty)
-cv2.createTrackbar("Val Max", "TrackBars", 255, 255, empty)
+#cv2.namedWindow("TrackBars")
+#cv2.resizeWindow("TrackBars", 640 , 640)
+#cv2.createTrackbar("Hue Min", "TrackBars", 0, 179, empty)
+#cv2.createTrackbar("Hue Max", "TrackBars", 179, 179, empty)
+#cv2.createTrackbar("Sat Min", "TrackBars", 0, 255, empty)
+#cv2.createTrackbar("Sat Max", "TrackBars", 255, 255, empty)
+#cv2.createTrackbar("Val Min", "TrackBars", 0, 255, empty)
+#cv2.createTrackbar("Val Max", "TrackBars", 255, 255, empty)
 
 
 
@@ -89,15 +79,13 @@ while True :
 
     # HSV Image
     imgHSV = cv2.cvtColor(img , cv2.COLOR_BGR2HSV)
-    cv2.imshow("livestreamHSV",imgHSV)
+    #cv2.imshow("livestreamHSV",imgHSV)
 
 
 
     # temp
     # h_min,h_max,s_min,s_max,v_min,v_max
     h_min,h_max,s_min,s_max,v_min,v_max = 93,142,128,255,49,255
-
-
     HSV_lower = np.array([h_min,s_min,v_min])
     HSV_upper = np.array([h_max,s_max,v_max])
 
@@ -105,15 +93,15 @@ while True :
     imgMask = cv2.inRange(imgHSV , HSV_lower , HSV_upper)
 
     # HSV Mask Image
-    cv2.imshow("livestreamHSV_MASK", imgMask)
+    #cv2.imshow("livestreamHSV_MASK", imgMask)
 
     # bitwise Image
     imgbitwise = cv2.bitwise_and(imgBlur,imgBlur,mask = imgMask)
-    cv2.imshow("bitMask",imgbitwise)
+    #cv2.imshow("bitMask",imgbitwise)
 
     # bitwise Canny
     imgMaskCanny = cv2.Canny(imgbitwise, 100, 100)
-    cv2.imshow("MaskCanny", imgMaskCanny)
+    #cv2.imshow("MaskCanny", imgMaskCanny)
 
     Object_x , Object_y , ObjectExist = getContours(imgMaskCanny , imgContour)
 
@@ -129,9 +117,9 @@ while True :
         print(Object_x , Object_y )
     # if ObjectExist and Lego.ev3connect : # When Object in Screen & Ev3 Connect on
 
-        if (Object_x - Window_Width/2)<-100 :
+        if (Object_x - Window_Width/2)>100 :
             Lego.MotorLR(speed_= -30, time_ = 500)
-        elif (Object_x - Window_Width/2)>100 :
+        elif (Object_x - Window_Width/2)<-100 :
             Lego.MotorLR(speed_= 30, time_ = 500)
  
             

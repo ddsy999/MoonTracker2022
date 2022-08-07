@@ -48,7 +48,7 @@ class constants:
             #f.close()
             self.EV3IP_ = '192.168.0.163'
             self.RPYC_SERVER_PORT = 18812
-            
+            self.VideoCaptureIP_ = 'http://192.168.0.108:8081'
             VideoCaptureIP_  = self.VideoCaptureIP_
             EV3IP_           = self.EV3IP_
             #Dropbox_appkey_  = self.Dropbox_appkey_
@@ -66,7 +66,7 @@ class constants:
             tictoc_ = int(current_Second)
             return [int(current_Second) , 1 ]
         elif tictoc_ != int(current_Second) and int(current_Second)%interval ==0 :
-            print(int(current_Second)  )
+            #print(int(current_Second)  )
             tictoc_ = int(current_Second)
             return [tictoc_ , 1 ]
         else : return [tictoc_ , 0 ]
