@@ -46,9 +46,10 @@ class constants:
             #f = open("gitignore_Dropbox_token.txt",'r')
             #self.Dropbox_token_ = f.readline()
             #f.close()
-            self.EV3IP_ = '192.168.0.163'
+            self.EV3IP_ = '192.168.0.163' # When Phone 192.168.103.49
+            
             self.RPYC_SERVER_PORT = 18812
-            self.VideoCaptureIP_ = 'http://192.168.0.108:8081'
+            self.VideoCaptureIP_ = 'http://192.168.0.108:8081' #'http://192.168.103.78:8081'
             VideoCaptureIP_  = self.VideoCaptureIP_
             EV3IP_           = self.EV3IP_
             #Dropbox_appkey_  = self.Dropbox_appkey_

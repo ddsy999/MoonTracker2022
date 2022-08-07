@@ -33,11 +33,13 @@ Object_x , Object_y ,ObjectExist = 0 , 0 , 0
 tictoc                           = -1 # default value : -1 
 timeEvent                        = 1 
 
-
-Lego = ev3_connect(EV3IP_ , RPYC_SERVER_PORT )
-
-
-capture = cv2.VideoCapture(VideoCaptureIP_)
+try:
+    Lego = ev3_connect(EV3IP_ , RPYC_SERVER_PORT )
+    capture = cv2.VideoCapture(VideoCaptureIP_)
+except:
+    Lego = ev3_connect('192.168.103.49', RPYC_SERVER_PORT )
+    capture = cv2.VideoCapture('http://192.168.103.78:8081')
+#capture = cv2.VideoCapture(VideoCaptureIP_)
 #capture = cv2.VideoCapture("http://192.168.0.108:8081")
 
 
@@ -60,8 +62,10 @@ while True :
     _ , img = capture.read()
     img = cv2.resize(img , (Window_Width,Window_Heigth))
     # img = cv2.flip(img,0)
-    # Original Image
-    #cv2.imshow("livestream",img)
+    # Original Image 
+    
+    
+    cv2.imshow("livestream",img)
 
     imgContour = img.copy()
     imgContour = cv2.rectangle(imgContour,(int(Window_Width/2-50),int(Window_Heigth/2-50)),(int(Window_Width/2+50),int(Window_Heigth/2+50)),(0,255,0),2)
