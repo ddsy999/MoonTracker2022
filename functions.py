@@ -1,12 +1,12 @@
 import cv2
 import numpy as np
 import paramiko
-import getpass
+#import getpass
 import cv2
 from time import sleep
 import rpyc
 import datetime
-import dropbox
+#import dropbox
 import os
 
 # functions
