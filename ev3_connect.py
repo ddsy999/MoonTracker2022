@@ -51,8 +51,8 @@ class ev3_connect :
         try:
             self.conn = rpyc.classic.connect( self.EV3IP_ , port = self.RPYC_SERVER_PORT)
             self.ev3 = self.conn.modules['ev3dev.ev3'] # import ev3dev.ev3 remotely
-            self.m_updown = self.ev3.Motor('outB')
-            self.m_leftright = self.ev3.LargeMotor('outA')
+            self.m_leftright = self.ev3.Motor('outA')
+            self.m_updown = self.ev3.LargeMotor('outB')
             
             self.ev3_screen = self.ev3.Screen()
             self.ev3_screen.draw.text((30,30),"Connect")

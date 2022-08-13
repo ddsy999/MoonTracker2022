@@ -28,19 +28,24 @@ EV3IP_                           = constants_.EV3IP_
 #Dropbox_appkey_                  = constants_.Dropbox_appkey_
 #Dropbox_token_                   = constants_.Dropbox_token_
 RPYC_SERVER_PORT                 = constants_.RPYC_SERVER_PORT
-Window_Width , Window_Heigth     = 640  , 360
+Window_Width , Window_Heigth     = 640  , 480
 Object_x , Object_y ,ObjectExist = 0 , 0 , 0
 tictoc                           = -1 # default value : -1 
 timeEvent                        = 1 
+UpDown_time = 2000
+LeftRight_time = 2000
+UpDown_Speed = 500
+LeftRight_Speed = 500
+moveKey = [ord("a"),ord("d"),ord("s"),ord("w")]
 
 try:
+    # Home Wifi
     Lego = ev3_connect(EV3IP_ , RPYC_SERVER_PORT )
     capture = cv2.VideoCapture(VideoCaptureIP_)
 except:
+    # Mobile
     Lego = ev3_connect('192.168.103.49', RPYC_SERVER_PORT )
     capture = cv2.VideoCapture('http://192.168.103.78:8081')
-#capture = cv2.VideoCapture(VideoCaptureIP_)
-#capture = cv2.VideoCapture("http://192.168.0.108:8081")
 
 
 #cv2.namedWindow("TrackBars")
@@ -65,7 +70,7 @@ while True :
     # Original Image 
     
     
-    cv2.imshow("livestream",img)
+    #cv2.imshow("livestream",img)
 
     imgContour = img.copy()
     imgContour = cv2.rectangle(imgContour,(int(Window_Width/2-50),int(Window_Heigth/2-50)),(int(Window_Width/2+50),int(Window_Heigth/2+50)),(0,255,0),2)
@@ -105,53 +110,54 @@ while True :
 
     # bitwise Canny
     imgMaskCanny = cv2.Canny(imgbitwise, 100, 100)
-    #cv2.imshow("MaskCanny", imgMaskCanny)
+    cv2.imshow("MaskCanny", imgMaskCanny)
 
     Object_x , Object_y , ObjectExist = getContours(imgMaskCanny , imgContour)
 
 
-    #cv2.imshow("Contour",imgContour)
+    cv2.imshow("Contour",imgContour)
 
 
 
     tictoc , timeEvent = constants_.timePrint(tictoc_ = tictoc , interval=2)
     
-    if ObjectExist and timeEvent: 
-        print('tictoc : {tictoc} timeEvent : {timeEvent} ObjectExist : {ObjectExist}'.format(tictoc=tictoc,timeEvent=timeEvent,ObjectExist=ObjectExist))
-        print(Object_x , Object_y )
-    # if ObjectExist and Lego.ev3connect : # When Object in Screen & Ev3 Connect on
+    
+    inputKey = cv2.waitKey(1)
+    
+    if inputKey in moveKey:
+            if inputKey == ord("a") :
+                Lego.MotorLR(speed_= -LeftRight_Speed, time_ = LeftRight_time)
+            elif inputKey == ord("d") :
+                Lego.MotorLR(speed_= LeftRight_Speed, time_ = LeftRight_time)
+    
+                
+            if inputKey == ord("w"):
+                Lego.MotorUD(speed_ = UpDown_Speed, time_ = UpDown_time)
+            elif inputKey == ord("s"):
+                Lego.MotorUD(speed_ = -UpDown_Speed, time_ = UpDown_time)
+    else :
+        if ObjectExist and timeEvent: 
+            print('tictoc : {tictoc} timeEvent : {timeEvent} ObjectExist : {ObjectExist}'.format(tictoc=tictoc,timeEvent=timeEvent,ObjectExist=ObjectExist))
+            print(Object_x , Object_y )
+        # if ObjectExist and Lego.ev3connect : # When Object in Screen & Ev3 Connect on
 
-        if (Object_x - Window_Width/2)>100 :
-            Lego.MotorLR(speed_= -30, time_ = 500)
-        elif (Object_x - Window_Width/2)<-100 :
-            Lego.MotorLR(speed_= 30, time_ = 500)
- 
-            
-        if (Object_y - Window_Heigth / 2) <-50:
-            Lego.MotorUD(speed_ = -300, time_ = 1000)
-        elif (Object_y - Window_Heigth / 2) > 50:
-            Lego.MotorUD(speed_ = 300, time_ = 1000)
+            if (Object_x - Window_Width/2)>100 :
+                Lego.MotorLR(speed_= -LeftRight_Speed/10, time_ = LeftRight_time/10)
+            elif (Object_x - Window_Width/2)<-100 :
+                Lego.MotorLR(speed_= LeftRight_Speed/10, time_ = LeftRight_time/10)
+    
+                
+            if (Object_y - Window_Heigth / 2) <-50:
+                Lego.MotorUD(speed_ = UpDown_Speed/10, time_ = UpDown_time/10)
+            elif (Object_y - Window_Heigth / 2) > 50:
+                Lego.MotorUD(speed_ = -UpDown_Speed/10, time_ = UpDown_time/10)
 
             
             
     
-    if cv2.waitKey(1) == ord("q"):
+    if inputKey == ord("q"):
         capture.release()
         cv2.destroyAllWindows()
         break
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
