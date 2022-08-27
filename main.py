@@ -10,6 +10,7 @@ import cv2
 from time import sleep
 import rpyc
 import datetime
+import time
 #import dropbox
 import os
 
@@ -28,7 +29,7 @@ EV3IP_                           = constants_.EV3IP_
 #Dropbox_appkey_                  = constants_.Dropbox_appkey_
 #Dropbox_token_                   = constants_.Dropbox_token_
 RPYC_SERVER_PORT                 = constants_.RPYC_SERVER_PORT
-Window_Width , Window_Heigth     = 640  , 480
+Window_Width , Window_Height     = 640  , 480
 Object_x , Object_y ,ObjectExist = 0 , 0 , 0
 tictoc                           = -1 # default value : -1 
 timeEvent                        = 1 
@@ -37,6 +38,22 @@ LeftRight_time = 2000
 UpDown_Speed = 500
 LeftRight_Speed = 500
 moveKey = [ord("a"),ord("d"),ord("s"),ord("w")]
+
+moveSlowRateTime  = 4
+moveSlowRateSpeed = 2
+autoSlowRateTime  = 10
+autoSlowRateSpeed = 5
+
+targetBoxRate = 4
+targetBox_Width = Window_Width/targetBoxRate
+targetBox_Height = Window_Height/targetBoxRate
+targetBox_WidthMidPoint  = Window_Width/2
+targetBox_HeightMidPoint = Window_Height/2
+targetBox = (int(targetBox_WidthMidPoint-targetBox_Width/2),int(targetBox_HeightMidPoint-targetBox_Height/2)),(int(targetBox_WidthMidPoint+targetBox_Width/2),int(targetBox_HeightMidPoint+targetBox_Height/2))
+
+targetBoxLeftMagin , targetBoxRightMagin = min(targetBox[1][0],targetBox[0][0]) , max(targetBox[1][0],targetBox[0][0])
+targetBoxUpMagin , targetBoxDownMagin    = min(targetBox[1][1],targetBox[0][1]) , max(targetBox[1][1],targetBox[0][1])
+
 
 try:
     # Home Wifi
@@ -60,12 +77,10 @@ except:
 
 
 
-
 while True :
-
     # img Read
     _ , img = capture.read()
-    img = cv2.resize(img , (Window_Width,Window_Heigth))
+    img = cv2.resize(img , (Window_Width,Window_Height))
     # img = cv2.flip(img,0)
     # Original Image 
     
@@ -73,7 +88,7 @@ while True :
     #cv2.imshow("livestream",img)
 
     imgContour = img.copy()
-    imgContour = cv2.rectangle(imgContour,(int(Window_Width/2-50),int(Window_Heigth/2-50)),(int(Window_Width/2+50),int(Window_Heigth/2+50)),(0,255,0),2)
+    imgContour = cv2.rectangle(imgContour,targetBox[0],targetBox[1],(0,255,0),2)
     # Gray Image
     imgGray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #cv2.imshow("Gray",imgGray)
@@ -82,7 +97,7 @@ while True :
     imgBlur = cv2.GaussianBlur(imgGray,(7,7),1)
 
     # Canny Imags
-    imgCanny = cv2.Canny(imgBlur,50,50)
+    imgCanny = cv2.Canny(imgBlur,100,100)
     #cv2.imshow("Canny", imgCanny)
 
 
@@ -125,39 +140,48 @@ while True :
     inputKey = cv2.waitKey(1)
     
     if inputKey in moveKey:
+        # if KeyBoard Move 
             if inputKey == ord("a") :
-                Lego.MotorLR(speed_= -LeftRight_Speed, time_ = LeftRight_time)
+                Lego.MotorLR(speed_= -LeftRight_Speed/moveSlowRateSpeed, time_ = LeftRight_time/moveSlowRateTime)
             elif inputKey == ord("d") :
-                Lego.MotorLR(speed_= LeftRight_Speed, time_ = LeftRight_time)
+                Lego.MotorLR(speed_= LeftRight_Speed/moveSlowRateSpeed, time_ = LeftRight_time/moveSlowRateTime)
     
                 
             if inputKey == ord("w"):
-                Lego.MotorUD(speed_ = UpDown_Speed, time_ = UpDown_time)
+                Lego.MotorUD(speed_ = -UpDown_Speed/moveSlowRateSpeed, time_ = UpDown_time/moveSlowRateTime)
             elif inputKey == ord("s"):
-                Lego.MotorUD(speed_ = -UpDown_Speed, time_ = UpDown_time)
+                Lego.MotorUD(speed_ = UpDown_Speed/moveSlowRateSpeed, time_ = UpDown_time/moveSlowRateTime)
     else :
         if ObjectExist and timeEvent: 
             print('tictoc : {tictoc} timeEvent : {timeEvent} ObjectExist : {ObjectExist}'.format(tictoc=tictoc,timeEvent=timeEvent,ObjectExist=ObjectExist))
             print(Object_x , Object_y )
         # if ObjectExist and Lego.ev3connect : # When Object in Screen & Ev3 Connect on
 
-            if (Object_x - Window_Width/2)>100 :
-                Lego.MotorLR(speed_= -LeftRight_Speed/10, time_ = LeftRight_time/10)
-            elif (Object_x - Window_Width/2)<-100 :
-                Lego.MotorLR(speed_= LeftRight_Speed/10, time_ = LeftRight_time/10)
+            if (Object_x - targetBoxRightMagin)  > 0 :
+                print("auto Move R")
+                Lego.MotorLR(speed_= LeftRight_Speed/autoSlowRateSpeed, time_ = LeftRight_time/autoSlowRateTime)
+            elif (Object_x - targetBoxLeftMagin) < 0 :
+                print("auto Move L")
+                Lego.MotorLR(speed_= -LeftRight_Speed/autoSlowRateSpeed, time_ = LeftRight_time/autoSlowRateTime)
     
                 
-            if (Object_y - Window_Heigth / 2) <-50:
-                Lego.MotorUD(speed_ = UpDown_Speed/10, time_ = UpDown_time/10)
-            elif (Object_y - Window_Heigth / 2) > 50:
-                Lego.MotorUD(speed_ = -UpDown_Speed/10, time_ = UpDown_time/10)
+            if (Object_y - targetBoxUpMagin ) < 0 :
+                print("auto Move U")
+                Lego.MotorUD(speed_ = -UpDown_Speed/autoSlowRateSpeed, time_ = UpDown_time/autoSlowRateTime)
+            elif (Object_y - targetBoxDownMagin) > 0 :
+                print("auto Move D")
+                Lego.MotorUD(speed_ = UpDown_Speed/autoSlowRateSpeed, time_ = UpDown_time/autoSlowRateTime)
 
             
-            
+    if inputKey == ord("c"):
+        now = time
+        now_string = now.strftime("%Y%m%d_%H_%M_%S")
+        cv2.imwrite(os.getcwd()+'\\Image_'+now_string+'.png',img)         
     
     if inputKey == ord("q"):
         capture.release()
         cv2.destroyAllWindows()
         break
-    
+
+
 
