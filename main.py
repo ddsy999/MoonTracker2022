@@ -125,12 +125,12 @@ while True :
 
     # bitwise Canny
     imgMaskCanny = cv2.Canny(imgbitwise, 100, 100)
-    cv2.imshow("MaskCanny", imgMaskCanny)
+    #cv2.imshow("MaskCanny", imgMaskCanny)
 
     Object_x , Object_y , ObjectExist = getContours(imgMaskCanny , imgContour)
 
 
-    cv2.imshow("Contour",imgContour)
+    #cv2.imshow("Contour",imgContour)
 
 
 
