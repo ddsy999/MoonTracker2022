@@ -6,7 +6,6 @@ import cv2
 import numpy as np
 import paramiko
 #import getpass
-import cv2
 from time import sleep
 import rpyc
 import datetime
@@ -81,12 +80,8 @@ while True :
     # img Read
     _ , img = capture.read()
     img = cv2.resize(img , (Window_Width,Window_Height))
-    # img = cv2.flip(img,0)
     # Original Image 
     
-    
-    #cv2.imshow("livestream",img)
-
     imgContour = img.copy()
     imgContour = cv2.rectangle(imgContour,targetBox[0],targetBox[1],(0,255,0),2)
     # Gray Image
@@ -129,13 +124,19 @@ while True :
 
     Object_x , Object_y , ObjectExist = getContours(imgMaskCanny , imgContour)
 
-
-    #cv2.imshow("Contour",imgContour)
+    # cv2 imshow
+    cv2.imshow("livestream",img)
+    cv2.imshow("Contour",imgContour)
 
 
 
     tictoc , timeEvent = constants_.timePrint(tictoc_ = tictoc , interval=2)
     
+    #print(Lego.ButtonInput())
+    
+    #Lego.ev3_screen.draw.text((30,30),"Connect")
+    #Lego.ev3_screen.update()
+    #Lego.ScreenUpdate()
     
     inputKey = cv2.waitKey(1)
     
@@ -155,7 +156,6 @@ while True :
         if ObjectExist and timeEvent: 
             print('tictoc : {tictoc} timeEvent : {timeEvent} ObjectExist : {ObjectExist}'.format(tictoc=tictoc,timeEvent=timeEvent,ObjectExist=ObjectExist))
             print(Object_x , Object_y )
-        # if ObjectExist and Lego.ev3connect : # When Object in Screen & Ev3 Connect on
 
             if (Object_x - targetBoxRightMagin)  > 0 :
                 print("auto Move R")
@@ -182,6 +182,8 @@ while True :
         capture.release()
         cv2.destroyAllWindows()
         break
+
+
 
 
 

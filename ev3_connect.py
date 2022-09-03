@@ -24,6 +24,7 @@ class ev3_connect :
         self.ev3_screen = "none"
         self.ev3_sound  = "none"
         self.ev3connect = 0 
+        self.buttons = "none"
         
         cli = paramiko.SSHClient()
         cli.set_missing_host_key_policy(paramiko.AutoAddPolicy)
@@ -58,6 +59,8 @@ class ev3_connect :
             self.ev3_screen.draw.text((30,30),"Connect")
             self.ev3_screen.update()
 
+            
+            self.buttons = self.ev3.Button()
 
             self.ev3_sound = self.ev3.Sound()
             self.ev3_sound.beep()
@@ -72,11 +75,12 @@ class ev3_connect :
             ev3_sound   = self.ev3_sound  
             ev3connect  = self.ev3connect 
 
-            print(" [End] success")
+            print(" [End] Ev3 success")
 
         except:
-            print(" [Err] ")
+            print(" [End] Ev3 Err")
             self.ev3connect = 0
+
 
 
     def MotorLR(self , speed_ , time_):
@@ -84,3 +88,11 @@ class ev3_connect :
         
     def MotorUD(self , speed_ , time_):
         self.m_updown.run_timed(speed_sp=speed_, time_sp=time_)    
+    
+    def ScreenUpdate(self):
+        self.ev3_screen.draw.text((30,30),"Connect")
+        self.ev3_screen.update()
+        
+    def ButtonInput(self):
+        self.buttons = self.ev3.Button()
+        return self.buttons
