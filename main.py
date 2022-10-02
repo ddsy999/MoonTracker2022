@@ -38,7 +38,7 @@ UpDown_Speed = 500
 LeftRight_Speed = 500
 moveKey = [ord("a"),ord("d"),ord("s"),ord("w")]
 
-moveSlowRateTime  = 4
+moveSlowRateTime  = 8
 moveSlowRateSpeed = 2
 autoSlowRateTime  = 10
 autoSlowRateSpeed = 5
@@ -149,9 +149,9 @@ while True :
     
                 
             if inputKey == ord("w"):
-                Lego.MotorUD(speed_ = -UpDown_Speed/moveSlowRateSpeed, time_ = UpDown_time/moveSlowRateTime)
-            elif inputKey == ord("s"):
                 Lego.MotorUD(speed_ = UpDown_Speed/moveSlowRateSpeed, time_ = UpDown_time/moveSlowRateTime)
+            elif inputKey == ord("s"):
+                Lego.MotorUD(speed_ = -UpDown_Speed/moveSlowRateSpeed, time_ = UpDown_time/moveSlowRateTime)
     else :
         if ObjectExist and timeEvent: 
             print('tictoc : {tictoc} timeEvent : {timeEvent} ObjectExist : {ObjectExist}'.format(tictoc=tictoc,timeEvent=timeEvent,ObjectExist=ObjectExist))
@@ -167,10 +167,10 @@ while True :
                 
             if (Object_y - targetBoxUpMagin ) < 0 :
                 print("auto Move U")
-                Lego.MotorUD(speed_ = -UpDown_Speed/autoSlowRateSpeed, time_ = UpDown_time/autoSlowRateTime)
+                Lego.MotorUD(speed_ = UpDown_Speed/autoSlowRateSpeed, time_ = UpDown_time/autoSlowRateTime)
             elif (Object_y - targetBoxDownMagin) > 0 :
                 print("auto Move D")
-                Lego.MotorUD(speed_ = UpDown_Speed/autoSlowRateSpeed, time_ = UpDown_time/autoSlowRateTime)
+                Lego.MotorUD(speed_ = -UpDown_Speed/autoSlowRateSpeed, time_ = UpDown_time/autoSlowRateTime)
 
             
     if inputKey == ord("c"):
@@ -182,6 +182,13 @@ while True :
         capture.release()
         cv2.destroyAllWindows()
         break
+
+
+
+
+
+
+
 
 
 
