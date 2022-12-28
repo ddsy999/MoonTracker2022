@@ -4,7 +4,7 @@
 
 import cv2
 import numpy as np
-import paramiko
+#import paramiko
 #import getpass
 from time import sleep
 import rpyc
