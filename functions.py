@@ -132,22 +132,5 @@ def readTxtFile(fileNm):
     return data
 
 
-def execCommands(EV3IP_):
-    cli = paramiko.SSHClient()
-    cli.set_missing_host_key_policy(paramiko.AutoAddPolicy)
-    cli.connect(EV3IP_, username="robot", password="maker")
-
-    commandLines = readTxtFile("" + "venv/ev3_ssh_command")  # 메모장 파일에 적어놨던 명령어 텍스트 읽어옴
-    print(commandLines)
-
-    stdin, stdout, stderr = cli.exec_command(";".join(commandLines))  # 명령어 실행
-    lines = stdout.readlines()  # 실행한 명령어에 대한 결과 텍스트
-    resultData = ''.join(lines)
-
-    print(resultData)  # 결과 확인
-
-
-#execCommands()
-
 
 
