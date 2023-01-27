@@ -2,7 +2,7 @@
 #import re
 import cv2
 #import numpy as np
-import paramiko
+#import paramiko
 #import getpass
 import cv2
 from time import sleep
