@@ -32,8 +32,8 @@ Window_Width , Window_Height     = 640  , 480
 Object_x , Object_y ,ObjectExist = 0 , 0 , 0
 tictoc                           = -1 # default value : -1 
 timeEvent                        = 1 
-UpDown_time = 2000
-LeftRight_time = 2000
+UpDown_time = 2000*2
+LeftRight_time = 2000*2
 UpDown_Speed = 500
 LeftRight_Speed = 500
 moveKey = [ord("a"),ord("d"),ord("s"),ord("w")]
@@ -60,7 +60,7 @@ try:
     capture = cv2.VideoCapture(VideoCaptureIP_)
 except:
     # Mobile
-    Lego = ev3_connect('192.168.103.49', RPYC_SERVER_PORT )
+    Lego = ev3_connect('172.30.1.18', RPYC_SERVER_PORT ) #192.168.103.49
     capture = cv2.VideoCapture('http://192.168.103.78:8081')
 
 

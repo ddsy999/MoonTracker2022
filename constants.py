@@ -49,7 +49,7 @@ class constants:
             self.EV3IP_ = '172.30.1.18' # When Phone 192.168.103.49
             
             self.RPYC_SERVER_PORT = 18812
-            self.VideoCaptureIP_ = 'http://172.30.1.42:8081' #'http://192.168.103.78:8081'
+            self.VideoCaptureIP_ = 'http://172.30.1.37:8081'#'http://172.30.1.43:8081' #'http://192.168.103.78:8081'
             VideoCaptureIP_  = self.VideoCaptureIP_
             EV3IP_           = self.EV3IP_
             #Dropbox_appkey_  = self.Dropbox_appkey_
