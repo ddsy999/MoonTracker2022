@@ -21,35 +21,16 @@ class constants:
     global RPYC_SERVER_PORT
     
     def __init__(self) :
-            self.VideoCaptureIP_ = ""
-            self.EV3IP_ = ""
-            self.Dropbox_appkey_ = ""
-            self.Dropbox_token_ = ""
-            self.RPYC_SERVER_PORT = ""
-            
 
             print(" [Start] excute constants.py")
-
-            #f = open("gitignore_VideoCaptureIP.txt",'r')
             
-            #self.VideoCaptureIP_ = f.readline()
-            #f.close()
-
-            #f = open("gitignore_EV3IP.txt",'r')
-            #self.EV3IP_ = f.readline()
-            #f.close()
-
-            #f = open("gitignore_Dropbox_appkey.txt",'r')
-            #self.Dropbox_appkey_ = f.readline()
-            #f.close()
-
-            #f = open("gitignore_Dropbox_token.txt",'r')
-            #self.Dropbox_token_ = f.readline()
-            #f.close()
-            self.EV3IP_ = '172.30.1.18' # When Phone 192.168.103.49
-            
+            self.VideoCaptureIP_ = 'http://172.30.1.37:8081'# Home Wifi 'http://172.30.1.43:8081' #'http://192.168.103.78:8081'
+            self.EV3IP_ = '172.30.1.18' # EV3IP When Phone 192.168.103.49
+            self.Dropbox_appkey_ = ""
+            self.Dropbox_token_ = ""
             self.RPYC_SERVER_PORT = 18812
-            self.VideoCaptureIP_ = 'http://172.30.1.37:8081'#'http://172.30.1.43:8081' #'http://192.168.103.78:8081'
+
+
             VideoCaptureIP_  = self.VideoCaptureIP_
             EV3IP_           = self.EV3IP_
             #Dropbox_appkey_  = self.Dropbox_appkey_
