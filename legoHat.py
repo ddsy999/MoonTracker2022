@@ -1,3 +1,3 @@
 from buildhat import Motor  
 motor = Motor('A')
-motor.start
+motor.run_forever()
