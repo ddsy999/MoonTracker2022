@@ -38,8 +38,8 @@ UpDown_Speed = 500
 LeftRight_Speed = 500
 moveKey = [ord("a"),ord("d"),ord("s"),ord("w")]
 
-moveSlowRateTime  = 8
-moveSlowRateSpeed = 2
+moveSlowRateTime  = 10
+moveSlowRateSpeed = 5
 autoSlowRateTime  = 10
 autoSlowRateSpeed = 5
 
@@ -58,10 +58,13 @@ try:
     # Home Wifi
     Lego = ev3_connect(EV3IP_ , RPYC_SERVER_PORT )
     capture = cv2.VideoCapture(VideoCaptureIP_)
+    LowMagnifiCapture = cv2.VideoCapture('http://172.30.1.67:8080/video')
+
 except:
     # Mobile
     Lego = ev3_connect('172.30.1.18', RPYC_SERVER_PORT ) #192.168.103.49
     capture = cv2.VideoCapture('http://192.168.103.78:8081')
+    LowMagnifiCapture = cv2.VideoCapture('http://172.30.1.67:8080/video')
 
 
 #cv2.namedWindow("TrackBars")
@@ -78,8 +81,12 @@ except:
 
 while True :
     # img Read
-    _ , img = capture.read()
+    ret1 , img = capture.read()
+    ret2 , LowImg = LowMagnifiCapture.read()
+    
     img = cv2.resize(img , (Window_Width,Window_Height))
+    LowImg = cv2.resize(LowImg , (640,480))
+    LowImg = cv2.flip(LowImg,0)
     # Original Image 
     
     imgContour = img.copy()
@@ -127,7 +134,7 @@ while True :
     # cv2 imshow
     cv2.imshow("livestream",img)
     cv2.imshow("Contour",imgContour)
-
+    cv2.imshow("LowMag",LowImg)
 
 
     tictoc , timeEvent = constants_.timePrint(tictoc_ = tictoc , interval=2)

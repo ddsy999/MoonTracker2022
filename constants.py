@@ -11,6 +11,10 @@ import datetime
 #import dropbox
 import os
 
+# Raspberry Pi 
+# ID jisoo
+# PWD jisoo
+
 #from functions import *
 class constants:
     
