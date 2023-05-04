@@ -1,28 +1,28 @@
 import cv2
 import numpy as np
+from camClass import camClass
+
+cam1 = camClass(ip='http://172.30.1.24:8081')
+
+cam1.show(canny=True)
+
+import picamera 
+import picamera.array 
+
+camera = PiCamera()
+camera.resolution = (640, 480)
+camera.framerate = 24
 
 
-cap1 = cv2.VideoCapture('http://172.30.1.37:8081')
-cap2 = cv2.VideoCapture('http://172.30.1.67:8080/video')
-while(True):
-    ret1, frame1 = cap1.read()
-    ret2, frame2 = cap2.read()
-    frame2 = cv2.resize(frame2 , (640,480))
-    frame2 = cv2.flip(frame2,0)
-    if ret1:
-        cv2.imshow('frame1',frame1)
-        
-    if ret2:
-        cv2.imshow('frame2',frame2)
-        
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+output = picamera.array.PiRGBArray(camera, size=camera.resolution)
+camera.start_preview()
+while True:
+    # 캡처한 이미지를 PiRGBArray에 저장
+    camera.capture(output, 'rgb')
+    # PiRGBArray를 OpenCV의 Mat 형식으로 변환
+    frame = output.array
+    cv2.imshow('image', frame)
+    if cv2.waitKey(1) == ord('q'):
         break
-
-cap1.release()
-cap2.release()
-cv2.destroyAllWindows()
-
-#sudo service motion restart
-#sudo nano /etc/motion/motion.conf
-#Thread /home/pi/webcam/cam.cam1.conf
-#Thread /home/pi/webcam/cam.cam2.conf
+    output.truncate(0)
+camera.stop_preview()
