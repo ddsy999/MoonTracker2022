@@ -58,6 +58,8 @@ class camClass :
         self.height = height 
         self.textName = "camClass_" + str(camClass.numOfcamClass)
         self.capture = cv2.VideoCapture(self.ip)
+        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         self.captureValid = self.capture.isOpened()
         
         self.targetBoxWidthMidPoint  = self.width/2

@@ -26,3 +26,15 @@ while True:
         break
     output.truncate(0)
 camera.stop_preview()
+
+
+
+
+import cv2
+import numpy as np
+#import paramiko
+#import getpass
+from time import sleep
+
+
+
