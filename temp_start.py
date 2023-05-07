@@ -1,51 +1,112 @@
+from buildhat import Motor  
+motor = Motor('A')
+motor.run_forever()
+
+
+
+import cv2 
+import numpy as np 
+from picamera import PiCamera
+
+capturePiCam = cv2.VideoCapture('http://localhost:8081')
+captureSV105 = cv2.VideoCapture(1) #1은 SV105
+
+capturePiCam.set(cv2.CAP_PROP_FRAME_WIDTH, 640//4)
+capturePiCam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480//4)
+
+captureSV105.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+captureSV105.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+while True:
+    ret1, frame1 = capturePiCam.read()
+    ret2, frame2 = captureSV105.read()
+    cv2.imshow('video1', frame1)
+    cv2.imshow('video2', frame2)
+    if cv2.waitKey(1) & 0xff == ord('q'):
+        break
+capturePiCam.release()
+captureSV105.release()
+cv2.destroyAllWindows()
+
+
+
+
+
+from buildhat import Motor
+motorUD = Motor('C')
+motorLR = Motor('D')
+
+# - left + right
+# + Up   - Down 
+motorLR.run_for_seconds(5,speed=10)
+cv2.resize(img, None, fx=2.0, fy=2.0, interpolation=cv2.INTER_LINEAR)
+
+
+
+
+
+
+
+
+
+import cv2 
+import numpy as np 
+from picamera import PiCamera
+
+#capturePiCam = cv2.VideoCapture('http://localhost:8081')
+captureSV105 = cv2.VideoCapture(1) #1은 SV105
+
+captureSV105.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+captureSV105.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+while True:
+    ret2, frame2 = captureSV105.read()
+    cv2.imshow('video', frame2)
+    if cv2.waitKey(1) & 0xff == ord('q'):
+        break
+captureSV105.release()
+cv2.destroyAllWindows()
+
+
+
+
+import cv2 
+import numpy as np 
+from picamera import PiCamera
+
+capturePiCam = cv2.VideoCapture('http://localhost:8081')
+#captureSV105 = cv2.VideoCapture(1) #1은 SV105
+
+capturePiCam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+capturePiCam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+while True:
+    ret1, frame1 = capturePiCam.read()
+    cv2.imshow('video', frame1)
+    if cv2.waitKey(1) & 0xff == ord('q'):
+        break
+capturePiCam.release()
+cv2.destroyAllWindows()
+
+
+picam = camClass(ip='http://localhost:8081')
+
 
 import cv2
 import numpy as np
-import paramiko
-import getpass
+from picamera import PiCamera
+from camClass import *
+
+picam = camClass(ip='http://localhost:8081')
+picam.show()
+
 import cv2
-from time import sleep
-import rpyc
-import datetime
-import dropbox
-import os
-from importlib import reload
+import numpy as np
+from picamera import PiCamera
+from camClass import *
+
+picam = camClass(ip='http://localhost:8081')
+picam.show(gray=True,canny=True)
 
 
 
-
-from constants import *
-from ssh_connect import *
-
-
-cons = constants()
-
-
-ssh_conn = ssh_connect(cons.EV3IP_)
-
-
-
-try:
-    connEV3 = rpyc.classic.connect( cons.EV3IP_ , port=cons.RPYC_SERVER_PORT)
-    ev3 = connEV3.modules['ev3dev.ev3'] # import ev3dev.ev3 remotely
-    m_updown = ev3.LargeMotor('outA')
-    m_leftright = ev3.Motor('outB')
-    ev3_screen = ev3.Screen()
-    ev3_screen.draw.text((30,30),"Connect")
-    ev3_screen.update()
-
-
-    ev3_sound = ev3.Sound()
-    ev3_sound.beep()
-
-    ev3connect = 1
-    
-    print(" [End] EV3 rpyc connect , ev3_connect.py")
-    
-except:
-    print(" [Err] EV3 rpyc connect , ev3_connect.py")
-    ev3connect = 0
-
-
-
-m_updown.run_timed(speed_sp=-100, time_sp=500)

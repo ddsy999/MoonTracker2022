@@ -88,4 +88,16 @@ class camClass :
             print("Error: fail to VideoCapture "+self.ip)
             
 
-            
+    @classmethod
+    def totalShow(cls):
+        import cv2 
+        while True:
+            inputKey = cv2.waitKey(1)
+            for instanceImg in cls:
+                cv2.imshow(instanceImg.capture.read())
+                
+            if inputKey == ord("q") or inputKey == ord("Q"):
+                for instanceImg in cls:
+                    instanceImg.capture.release()
+                cv2.destroyAllWindows()
+                break
