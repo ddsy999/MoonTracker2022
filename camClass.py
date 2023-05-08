@@ -119,3 +119,19 @@ class camClass :
                     instanceImg.capture.release()
                 cv2.destroyAllWindows()
                 break
+            
+class moveClass:
+    def __init__(self,UDport='C',LRport='D',speed=10) :
+        from buildhat import Motor
+        self.motorUD = Motor('C')
+        self.motorLR = Motor('D')
+        self.speed=speed
+        
+    def Up(self,sec):
+        self.motorUD.run_for_seconds(sec,speed=self.speed)
+    def Down(self,sec):
+        self.motorUD.run_for_seconds(sec,speed=-self.speed)
+    def Right(self,sec):
+        self.motorLR.run_for_seconds(sec,speed=self.speed)
+    def Left(self,sec):
+        self.motorLR.run_for_seconds(sec,speed=-self.speed)
