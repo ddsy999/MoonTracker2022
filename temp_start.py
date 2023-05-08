@@ -39,9 +39,6 @@ motorLR = Motor('D')
 # - left + right
 # + Up   - Down 
 motorLR.run_for_seconds(5,speed=10)
-cv2.resize(img, None, fx=2.0, fy=2.0, interpolation=cv2.INTER_LINEAR)
-
-
 
 
 
