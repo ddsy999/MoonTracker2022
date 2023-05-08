@@ -110,3 +110,8 @@ picam.show(gray=True,canny=True)
 
 
 
+sv105Cam = camClass(ip=1,width=640,height=480)
+piCam = camClass(ip='http://localhost:8081',width=640,height=480,fx=0.25,fy=0.25)
+#picam.show(gray=True,canny=True)
+
+camClass.totalShow()

@@ -13,6 +13,9 @@ def isGray(img,gray):
     else :
         return img
 
+def isResize(img,fxInput,fyInput):
+    return cv2.resize(img, (0,0), fx=fxInput, fy=fyInput)
+
 def isCanny(img,gray):
     if gray :
         return cv2.Canny(img,100,100)
@@ -50,12 +53,18 @@ def getContours(img , imgContour):
     
 class camClass : 
     numOfcamClass = 0
-    def __init__(self,ip,width=640,height=480) :    
+    instances =[]
+    def __init__(self,ip,width=640,height=480,fx=1,fy=1,filp=True,gray=False,canny=False) :    
         import cv2 
         camClass.numOfcamClass +=1 
         self.ip = ip
         self.width = width 
         self.height = height 
+        self.fx = fx
+        self.fy = fy
+        self.gray = gray
+        self.filp = filp
+        self.canny = canny
         self.textName = "camClass_" + str(camClass.numOfcamClass)
         self.capture = cv2.VideoCapture(self.ip)
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
@@ -65,16 +74,17 @@ class camClass :
         self.targetBoxWidthMidPoint  = self.width/2
         self.targetBoxHeightMidPoint = self.height/2
         self.targetBox = (int(self.targetBoxWidthMidPoint-self.width/2),int(self.targetBoxHeightMidPoint-self.height/2)),(int(self.targetBoxWidthMidPoint+self.width/2),int(self.targetBoxHeightMidPoint+self.height/2))
+        camClass.instances.append(self)
 
-
-    def show(self,filp=True,gray=False,canny=False):
+    def show(self):
         import cv2 
         while True and self.captureValid:
             inputKey = cv2.waitKey(1)
             ret, frame = self.capture.read()
-            frame = isFlip(frame,filp)
-            frame = isGray(frame,gray)
-            frame = isCanny(frame,canny)
+            frame = isResize(frame,self.fx,self.fy)
+            frame = isFlip(frame,self.filp)
+            frame = isGray(frame,self.gray)
+            frame = isCanny(frame,self.canny)
             if ret:
                 cv2.imshow(self.textName, frame)
                 if inputKey == ord("q") or inputKey == ord("Q"):
@@ -87,17 +97,25 @@ class camClass :
         if not self.captureValid :
             print("Error: fail to VideoCapture "+self.ip)
             
-
+    def fittingCaptureRead(self,frame):
+        frame = isResize(frame,self.fx,self.fy)
+        frame = isFlip(frame,self.filp)
+        frame = isGray(frame,self.gray)
+        frame = isCanny(frame,self.canny)
+        return frame
+    
     @classmethod
     def totalShow(cls):
         import cv2 
         while True:
             inputKey = cv2.waitKey(1)
-            for instanceImg in cls:
-                cv2.imshow(instanceImg.capture.read())
-                
+            for instanceImg in cls.instances:
+                ret, frame = instanceImg.capture.read()
+                frame = instanceImg.fittingCaptureRead(instanceImg)
+                cv2.imshow(instanceImg.textName, frame)
+
             if inputKey == ord("q") or inputKey == ord("Q"):
-                for instanceImg in cls:
+                for instanceImg in cls.instances:
                     instanceImg.capture.release()
                 cv2.destroyAllWindows()
                 break
