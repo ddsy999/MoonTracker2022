@@ -2,8 +2,8 @@
 import cv2 
 
 
-def isFlip(img,filp):
-    if filp :
+def isFlip(img,flip):
+    if flip :
         return cv2.flip(img,0)
     else :
         return img
@@ -22,40 +22,45 @@ def isCanny(img,gray):
     else :
         return img
 
-def getContours(img , imgContour):
-    import cv2
-    try:
-        global Object_x , Object_y , ObjectExist
-        contours , hierarchy = cv2.findContours(img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+def HSVandMasked(img,h_min = 0,h_max = 179,s_min = 0,s_max = 255,v_min = 0,v_max = 255):
+    import numpy as np
+    hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    lower_range = np.array([h_min, s_min, v_min])
+    upper_range = np.array([h_max, s_max, v_max])
+    mask = cv2.inRange(hsv_img, lower_range, upper_range)
+    return mask
+    
+
+def getContourImg(img,target=True,areaMin=0):
+    import numpy as np
+    # contour를 찾는 func & option 규칙들 
+    img_contour = np.zeros_like(img)
+    contours , hierarchy = cv2.findContours(img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+    cx,cy= 0,0
+    if target == True:
         for cnt in contours:
-            area = cv2.contourArea(cnt)
-            #print(area)
-            if area > 2000:
-                cv2.drawContours(imgContour , cnt , -1 , (255,0,0),3)
-                peri = cv2.arcLength(cnt,True)
-                #print(peri)
-                approx = cv2.approxPolyDP(cnt,0.02*peri,True )
-                objCor = len(approx)
-                x,y,w,h = cv2.boundingRect(approx)
-                x,y,w,h = int(x),int(y),int(w),int(h) 
-                #print(['Edge', 'Width coord', 'Height coord'])
-                #print([len(approx), (x + w/2) , (y + h/2)])
-                cv2.circle(imgContour,(int(x + w/2) , int(y + h/2)) ,2, (0,0,255),cv2.FILLED)
-                Object_x = (x + w/2)
-                Object_y = (y + h/2)
-                if len(approx)>=6 :
-                    ObjectExist = 1
-                return [Object_x , Object_y , 1]
-    except:
-        #print("fail to getContours")
-        return [ -1 , -1 , 0]
-    return [ -1 , -1 , 0]    # object x , y , exist
+            areaCnt = cv2.contourArea(cnt)
+            if areaCnt > areaMin:
+                M = cv2.moments(cnt)
+                # Contour의 중심점 계산
+                if M['m00'] == 0:
+                    # contour 면적이 0인 경우
+                    continue
+                cx = int(M['m10'] / M['m00'])
+                cy = int(M['m01'] / M['m00'])
+            else:
+                pass
+    cv2.drawContours(img_contour,contours,-1,(255,0,0),3,2)
+    return img_contour,cx,cy
+
+
     
 class camClass : 
     numOfcamClass = 0
     instances =[]
-    def __init__(self,ip,width=640,height=480,fx=1,fy=1,filp=True,gray=False,canny=False) :    
+    def __init__(self,ip,width=640,height=480,fx=1,fy=1,flip=True,gray=False,canny=False,area=500) :    
         import cv2 
+        import time 
         camClass.numOfcamClass +=1 
         self.ip = ip
         self.width = width 
@@ -63,43 +68,94 @@ class camClass :
         self.fx = fx
         self.fy = fy
         self.gray = gray
-        self.filp = filp
+        self.flip = flip
         self.canny = canny
         self.textName = "camClass_" + str(camClass.numOfcamClass)
         self.capture = cv2.VideoCapture(self.ip)
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         self.captureValid = self.capture.isOpened()
+        self.prevtime = time.time()
+        self.moveKey = {"left":ord("a"),"right":ord("d"),"down":ord("s"),"up":ord("w") }
+        self.cx = width/2
+        self.cy = height/2
+        self.area = area
+        self.frame = None 
         
         self.targetBoxWidthMidPoint  = self.width/2
         self.targetBoxHeightMidPoint = self.height/2
         self.targetBox = (int(self.targetBoxWidthMidPoint-self.width/2),int(self.targetBoxHeightMidPoint-self.height/2)),(int(self.targetBoxWidthMidPoint+self.width/2),int(self.targetBoxHeightMidPoint+self.height/2))
         camClass.instances.append(self)
 
-    def show(self):
+    def show(self,masked=True,value_min=100):
         import cv2 
+        import keyboard
         while True and self.captureValid:
             inputKey = cv2.waitKey(1)
             ret, frame = self.capture.read()
-            frame = isResize(frame,self.fx,self.fy)
-            frame = isFlip(frame,self.filp)
-            frame = isGray(frame,self.gray)
-            frame = isCanny(frame,self.canny)
+            frame = self.fittingCaptureRead(frame)
+            
+            # Get Contour (HSV and Masked and Contour)
+            
+            # Blue Color Setting 
+            h_min,h_max,s_min,s_max,v_min,v_max = 93,142,128,255,49,255
+            
+            # Value 100 
+            # h_min,h_max,s_min,s_max,v_min,v_max = 0,179,0,255,100,255
+            
+            # Detecting Object
+            imgDetect,cx,cy = self.detectObject(frame,h_min,h_max,s_min,s_max,v_min,v_max)
+            frame = cv2.circle(frame, (self.cx,self.cy), 5, (0, 0, 255), -1)
+            
             if ret:
                 cv2.imshow(self.textName, frame)
+                if masked==True:
+                    cv2.imshow(self.textName+" Detect", imgDetect)
+                    
                 if inputKey == ord("q") or inputKey == ord("Q"):
-                    self.capture.release()
+                    #self.capture.release()
                     cv2.destroyAllWindows()
                     break
             else:
-                print("Error: Failed to capture video stream "+self.ip)
+                print("Error: Failed to capture video stream "+str(self.ip))
                 break
-        if not self.captureValid :
-            print("Error: fail to VideoCapture "+self.ip)
             
+        if not self.captureValid :
+            print("Error: fail to VideoCapture "+str(self.ip))
+
+    def release(self):
+        self.capture.release()
+        cv2.destroyAllWindows()
+        
+    def noCamDectect(self,h_min,h_max,s_min,s_max,v_min,v_max ) :
+        import keyboard
+        import time
+        #self.capture = cv2.VideoCapture(self.ip)
+        while True: # Detected Object
+            ret, frame = self.capture.read()
+            frame = self.fittingCaptureRead(frame)
+            imgDetect = HSVandMasked(frame,h_min,h_max,s_min,s_max,v_min,v_max)
+            imgDetect,cx,cy = getContourImg(imgDetect,target=True,areaMin=self.area)    
+            self.cx = cx # width
+            self.cy = cy # height
+            print(cx,cy)
+            time.sleep(1)
+            if keyboard.is_pressed('esc'):
+                break
+
+    
+    def detectObject(self,frame,h_min,h_max,s_min,s_max,v_min,v_max ):
+        # Detected Object
+        frame = self.fittingCaptureRead(frame)
+        imgDetect = HSVandMasked(frame,h_min,h_max,s_min,s_max,v_min,v_max)
+        imgDetect,cx,cy = getContourImg(imgDetect,target=True,areaMin=self.area)    
+        self.cx = cx # width
+        self.cy = cy # height
+        return(imgDetect,cx,cy)
+    
     def fittingCaptureRead(self,frame):
         frame = isResize(frame,self.fx,self.fy)
-        frame = isFlip(frame,self.filp)
+        frame = isFlip(frame,self.flip)
         frame = isGray(frame,self.gray)
         frame = isCanny(frame,self.canny)
         return frame
