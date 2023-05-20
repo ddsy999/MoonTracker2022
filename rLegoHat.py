@@ -50,7 +50,7 @@ user_input = input("Dual Cam Start Press  q : ")
 #2. Dual Cam Window
 if user_input == 'q':
     print("Dual Cam Start")
-    computerCam.show(maskedview=True)
+    computerCam.show(maskedview=False)
     print("Dual Cam End")
 
 
@@ -65,3 +65,4 @@ if user_input == 'q':
 #computerCam.release()
 # 키 입력 이벤트 리스너 중지
 listener.stop()
+print('End')
