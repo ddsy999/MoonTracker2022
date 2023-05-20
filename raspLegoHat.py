@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 from camClass import *
 from pynput import keyboard
-
-
 from buildhat import Motor
+
+print('Motor Loading')
 motorUD = Motor('C')
 motorLR = Motor('D')
 
