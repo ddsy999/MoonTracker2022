@@ -22,6 +22,14 @@ def isCanny(img,gray):
     else :
         return img
 
+def isBox(img , targetBox):
+    if targetBox==True:
+        img = cv2.rectangle(img,targetBox[0],targetBox[1],(0,255,0),2)
+        return img
+    else :
+        return img
+    
+
 def HSVandMasked(img,h_min = 0,h_max = 179,s_min = 0,s_max = 255,v_min = 0,v_max = 255):
     import numpy as np
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -87,6 +95,14 @@ class camClass :
         self.targetBoxHeightMidPoint = self.height/2
         self.targetBox = (int(self.targetBoxWidthMidPoint-self.width/2),int(self.targetBoxHeightMidPoint-self.height/2)),(int(self.targetBoxWidthMidPoint+self.width/2),int(self.targetBoxHeightMidPoint+self.height/2))
         camClass.instances.append(self)
+        
+    def fittingCaptureRead(self,frame):
+        frame = isResize(frame,self.fx,self.fy)
+        frame = isFlip(frame,self.flip)
+        frame = isGray(frame,self.gray)
+        frame = isCanny(frame,self.canny)
+        frame = isBox(frame,self.targetBox)
+        return frame
 
     def show(self,maskedview=True,value_min=100,HSVvalue = [93,142,128,255,49,255] ):
         import cv2 
@@ -107,10 +123,7 @@ class camClass :
             # Detecting Object
             imgDetect,cx,cy = self.detectObject(frame,h_min,h_max,s_min,s_max,v_min,v_max)
             frame = cv2.circle(frame, (self.cx,self.cy), 5, (0, 0, 255), -1)
-            
-            if self.targetBox==True:
-                imgDetect = cv2.rectangle(imgDetect,self.targetBox[0],self.targetBox[1],(0,255,0),2)
-            
+
             if ret:
                 cv2.imshow(self.textName, frame)
                 if maskedview==True:
@@ -157,12 +170,7 @@ class camClass :
         self.cy = cy # height
         return(imgDetect,cx,cy)
     
-    def fittingCaptureRead(self,frame):
-        frame = isResize(frame,self.fx,self.fy)
-        frame = isFlip(frame,self.flip)
-        frame = isGray(frame,self.gray)
-        frame = isCanny(frame,self.canny)
-        return frame
+
     
     @classmethod
     def totalShow(cls):

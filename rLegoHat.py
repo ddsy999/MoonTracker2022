@@ -13,7 +13,7 @@ motorLR = Motor('D')
 # 키 입력 이벤트 핸들러
 def on_key_press(key):
     try:
-        if key == keyboard.Key.esc:  # ESC 키 체크
+        if key == keyboard.Key.esc or key.char=='q':  # ESC 키 체크
             print('ESC Key : Keyboad Listener End')
             listener.stop()  # 리스너 중지
         elif key.char == 'a':
@@ -39,11 +39,19 @@ print("Start")
 #1. cam 연결 시도
 print("Confirming Cam Status ")
 try:
-    computerCam = camClass(ip='http://localhost:8081', flip=False,targetBox=True)
+    piCam = camClass(ip='http://localhost:8081', flip=True,targetBox=True)
 except:
-    print("Cam Connect Fail")
+    print("piCam Connect Fail")
 finally:
-    print("Cam Connet Succ: " + str(computerCam.captureValid))
+    print("piCam Connet Succ: " + str(piCam.captureValid))
+    
+try:
+    sv105Cam = camClass(ip=1, flip=False,width=640/4 , height=480/4)
+except:
+    print("sv105Cam Connect Fail")
+finally:
+    print("sv105Cam Connet Succ: " + str(sv105Cam.captureValid))
+    
 
 user_input = input("Dual Cam Start Press  q : ")
 
@@ -51,7 +59,7 @@ user_input = input("Dual Cam Start Press  q : ")
 #2. Dual Cam Window
 if user_input == 'q':
     print("Dual Cam Start")
-    computerCam.show(maskedview=False)
+    camClass.totalShow()
     print("Dual Cam End")
 
 
@@ -59,11 +67,11 @@ if user_input == 'q':
 #user_input = input("자동 추적을 시작하려면 q를 입력하세요: ")
 #if user_input == 'q':
 #    h_min, h_max, s_min, s_max, v_min, v_max = 93, 142, 128, 255, 49, 255
-#    computerCam.noCamDectect(h_min, h_max, s_min, s_max, v_min, v_max)
+#    piCam.noCamDectect(h_min, h_max, s_min, s_max, v_min, v_max)
 
     
 
-#computerCam.release()
+#piCam.release()
 # 키 입력 이벤트 리스너 중지
 listener.stop()
 print('End')
