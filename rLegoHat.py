@@ -13,7 +13,7 @@ motorLR = Motor('D')
 # 키 입력 이벤트 핸들러
 def on_key_press(key):
     try:
-        if key == keyboard.Key.esc or key.char=='q':  # ESC 키 체크
+        if key == keyboard.Key.esc :  # ESC 키 체크
             print('ESC Key : Keyboad Listener End')
             listener.stop()  # 리스너 중지
         elif key.char == 'a':
