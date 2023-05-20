@@ -46,7 +46,7 @@ finally:
     print("piCam Connet Succ: " + str(piCam.captureValid))
     
 try:
-    sv105Cam = camClass(ip=1, flip=False,width=640//4 , height=480//4)
+    sv105Cam = camClass(ip=1, flip=False,width=640 , height=480,fx=0.25,fy=0.25)
 except:
     print("sv105Cam Connect Fail")
 finally:
