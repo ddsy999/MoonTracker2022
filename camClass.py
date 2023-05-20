@@ -87,7 +87,7 @@ class camClass :
         self.targetBox = (int(self.targetBoxWidthMidPoint-self.width/2),int(self.targetBoxHeightMidPoint-self.height/2)),(int(self.targetBoxWidthMidPoint+self.width/2),int(self.targetBoxHeightMidPoint+self.height/2))
         camClass.instances.append(self)
 
-    def show(self,masked=True,value_min=100):
+    def show(self,maskedview=True,value_min=100,HSVvalue = [93,142,128,255,49,255] ):
         import cv2 
         import keyboard
         while True and self.captureValid:
@@ -98,7 +98,7 @@ class camClass :
             # Get Contour (HSV and Masked and Contour)
             
             # Blue Color Setting 
-            h_min,h_max,s_min,s_max,v_min,v_max = 93,142,128,255,49,255
+            h_min,h_max,s_min,s_max,v_min,v_max = HSVvalue
             
             # Value 100 
             # h_min,h_max,s_min,s_max,v_min,v_max = 0,179,0,255,100,255
@@ -109,7 +109,7 @@ class camClass :
             
             if ret:
                 cv2.imshow(self.textName, frame)
-                if masked==True:
+                if maskedview==True:
                     cv2.imshow(self.textName+" Detect", imgDetect)
                     
                 if inputKey == ord("q") or inputKey == ord("Q"):
