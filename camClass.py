@@ -108,7 +108,7 @@ class camClass :
             imgDetect,cx,cy = self.detectObject(frame,h_min,h_max,s_min,s_max,v_min,v_max)
             frame = cv2.circle(frame, (self.cx,self.cy), 5, (0, 0, 255), -1)
             
-            if self.targetBox:
+            if self.targetBox==True:
                 imgDetect = cv2.rectangle(imgDetect,self.targetBox[0],self.targetBox[1],(0,255,0),2)
             
             if ret:

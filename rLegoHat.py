@@ -39,7 +39,7 @@ print("Start")
 #1. cam 연결 시도
 print("Confirming Cam Status ")
 try:
-    computerCam = camClass(ip='http://localhost:8081', flip=False,target=True)
+    computerCam = camClass(ip='http://localhost:8081', flip=False,targetBox=True)
 except:
     print("Cam Connect Fail")
 finally:
