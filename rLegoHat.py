@@ -51,7 +51,7 @@ user_input = input("Dual Cam Start Press  q : ")
 #2. Dual Cam Window
 if user_input == 'q':
     print("Dual Cam Start")
-    computerCam.show(maskedview=False)
+    computerCam.show(maskedview=False,target=True)
     print("Dual Cam End")
 
 

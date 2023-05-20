@@ -58,7 +58,7 @@ def getContourImg(img,target=True,areaMin=0):
 class camClass : 
     numOfcamClass = 0
     instances =[]
-    def __init__(self,ip,width=640,height=480,fx=1,fy=1,flip=True,gray=False,canny=False,area=500) :    
+    def __init__(self,ip,targetBox=False,width=640,height=480,fx=1,fy=1,flip=True,gray=False,canny=False,area=500) :    
         import cv2 
         import time 
         camClass.numOfcamClass +=1 
@@ -81,6 +81,7 @@ class camClass :
         self.cy = height/2
         self.area = area
         self.frame = None 
+        self.targetBox = targetBox
         
         self.targetBoxWidthMidPoint  = self.width/2
         self.targetBoxHeightMidPoint = self.height/2
@@ -106,6 +107,9 @@ class camClass :
             # Detecting Object
             imgDetect,cx,cy = self.detectObject(frame,h_min,h_max,s_min,s_max,v_min,v_max)
             frame = cv2.circle(frame, (self.cx,self.cy), 5, (0, 0, 255), -1)
+            
+            if self.targetBox:
+                imgDetect = cv2.rectangle(imgDetect,self.targetBox[0],self.targetBox[1],(0,255,0),2)
             
             if ret:
                 cv2.imshow(self.textName, frame)
