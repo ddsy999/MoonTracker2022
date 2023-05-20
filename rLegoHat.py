@@ -39,7 +39,7 @@ print("Start")
 #1. cam 연결 시도
 print("Confirming Cam Status ")
 try:
-    computerCam = camClass(ip='http://localhost:8081', flip=False)
+    computerCam = camClass(ip='http://localhost:8081', flip=False,target=True)
 except:
     print("Cam Connect Fail")
 finally:
@@ -51,7 +51,7 @@ user_input = input("Dual Cam Start Press  q : ")
 #2. Dual Cam Window
 if user_input == 'q':
     print("Dual Cam Start")
-    computerCam.show(maskedview=False,target=True)
+    computerCam.show(maskedview=False)
     print("Dual Cam End")
 
 
