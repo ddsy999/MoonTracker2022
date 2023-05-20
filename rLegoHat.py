@@ -7,6 +7,8 @@ from buildhat import Motor
 print('Motor Loading')
 motorUD = Motor('C')
 motorLR = Motor('D')
+# - left + right
+# + Up   - Down 
 
 # 키 입력 이벤트 핸들러
 def on_key_press(key):
@@ -15,14 +17,13 @@ def on_key_press(key):
             print('ESC Key : Keyboad Listener End')
             listener.stop()  # 리스너 중지
         elif key.char == 'a':
-            print('a')
+            motorLR.run_for_seconds(2,speed=-10)
         elif key.char == 's':
-            motorLR.run_for_seconds(5,speed=10)
-            print('s')
+            motorUD.run_for_seconds(2,speed=-10)
         elif key.char == 'd':
-            print('d')
+            motorLR.run_for_seconds(2,speed=10)
         elif key.char == 'w':
-            print('w')
+            motorUD.run_for_seconds(2,speed=10)
     except AttributeError:
         pass
     
