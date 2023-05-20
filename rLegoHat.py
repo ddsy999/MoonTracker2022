@@ -30,7 +30,7 @@ def on_key_press(key):
     
 #0. Start 버튼 대기
 user_input = input("Stat press Any Key ")
-cv2.VideoCapture.release()
+
 # 키 입력 이벤트 핸들러 등록
 listener = keyboard.Listener(on_press=on_key_press)
 listener.start()
