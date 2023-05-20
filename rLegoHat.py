@@ -46,7 +46,7 @@ finally:
     print("piCam Connet Succ: " + str(piCam.captureValid))
     
 try:
-    sv105Cam = camClass(ip=1, flip=False,width=640/4 , height=480/4)
+    sv105Cam = camClass(ip=1, flip=False,width=640//4 , height=480//4)
 except:
     print("sv105Cam Connect Fail")
 finally:
@@ -61,6 +61,7 @@ if user_input == 'q':
     print("Dual Cam Start")
     camClass.totalShow()
     print("Dual Cam End")
+
 
 
 #3. sv105 cam window 실행 & 자동추적
