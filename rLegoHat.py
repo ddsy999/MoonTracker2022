@@ -17,13 +17,13 @@ def on_key_press(key):
             print('ESC Key : Keyboad Listener End')
             listener.stop()  # 리스너 중지
         elif key.char == 'a':
-            motorLR.run_for_seconds(2,speed=-10)
+            motorLR.run_for_seconds(1,speed=-10)
         elif key.char == 's':
-            motorUD.run_for_seconds(2,speed=-10)
+            motorUD.run_for_seconds(1,speed=-10)
         elif key.char == 'd':
-            motorLR.run_for_seconds(2,speed=10)
+            motorLR.run_for_seconds(1,speed=20)
         elif key.char == 'w':
-            motorUD.run_for_seconds(2,speed=10)
+            motorUD.run_for_seconds(1,speed=20)
     except AttributeError:
         pass
     
@@ -41,7 +41,7 @@ print("Start")
 print("Confirming Cam Status ")
 try:
     piCam = camClass(ip='http://localhost:8081', flip=True,targetBox=True)
-    sv105Cam = camClass(ip=1, flip=False,width=640 , height=480,fx=0.25,fy=0.25)
+    sv105Cam = camClass(ip=1, flip=False)
 except:
     print("piCam Connect Fail")
 finally:
@@ -59,6 +59,49 @@ if user_input == 'q':
     print("Dual Cam End")
 
 
+
+
+
+#0. Start 버튼 대기 
+user_input = input("Stat press Any Key ")
+print("Start")
+
+
+#1. cam 연결 시도
+#1-1. cam 연결 상태 print 
+
+print("Confirming Cam Status")
+try:
+    HSVListValue = [93,142,128,255,49,255]
+    piCam = camClass(ip='http://localhost:8081', flip=True,targetBox=True)
+    sv105Cam = camClass(ip=1, flip=False,width=640 , height=480,fx=0.25,fy=0.25)
+except:
+    print("cam Failed")
+finally:
+    print("sv105Cam Success " + str(sv105Cam.captureValid)+" "+str(sv105Cam.textName))
+    print("piCam Success " + str(piCam.captureValid)+" "+str(piCam.textName))
+    
+user_input = input("Cam sv105 Press 'v' or Cam Picam Press 'p' ")
+
+while True:
+     # 키 입력 대기
+    print('while')
+    if user_input == 'v':
+        print('press v')
+        print("valid sv105Cam "+ str(sv105Cam.captureValid))
+        sv105Cam.show()
+        user_input = input("Cam sv105 Press 'v' or Cam Picam Press 'p' ")
+        
+    elif user_input == 'p':
+        print('press p')
+        print("valid piCam "+ str(piCam.captureValid))
+        piCam.show()
+        user_input = input("Cam sv105 Press 'v' or Cam Picam Press 'p' ")
+        
+    if user_input == 'q': 
+        break
+    
+    
 
 #3. sv105 cam window 실행 & 자동추적
 #user_input = input("자동 추적을 시작하려면 q를 입력하세요: ")
