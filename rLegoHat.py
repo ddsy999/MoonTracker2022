@@ -72,8 +72,8 @@ print("Start")
 print("Confirming Cam Status")
 try:
     HSVListValue = [93,142,128,255,49,255]
-    piCam = camClass(ip='http://localhost:8081', flip=True,targetBox=True)
-    sv105Cam = camClass(ip=1, flip=False,width=640 , height=480,fx=0.25,fy=0.25)
+    sv105Cam = camClass(ip=1,flip=False,HSVList=HSVListValue,contourMasked=False,targetBox=True)
+    piCam = camClass(ip='http://localhost:8081',flip=False,HSVList=HSVListValue,contourMasked=False)
 except:
     print("cam Failed")
 finally:
