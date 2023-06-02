@@ -42,12 +42,10 @@ print("Confirming Cam Status ")
 try:
     piCam = camClass(ip='http://localhost:8081', flip=True,targetBox=True)
     sv105Cam = camClass(ip=1, flip=False)
-except:
-    print("piCam Connect Fail")
-finally:
     print("piCam Connet Succ: " + str(piCam.captureValid))
     print("sv105Cam Connet Succ: " + str(sv105Cam.captureValid))
-
+except:
+    print("piCam Connect Fail")
 
 user_input = input("Dual Cam Start Press  q : ")
 
