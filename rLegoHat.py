@@ -31,9 +31,6 @@ def on_key_press(key):
 #0. Start 버튼 대기
 user_input = input("Stat press Any Key ")
 
-# 키 입력 이벤트 핸들러 등록
-listener = keyboard.Listener(on_press=on_key_press)
-listener.start()
 print("Start")
 
 
@@ -94,7 +91,7 @@ while True:
         
     if user_input == 'q': 
         break
-    
+
     
 
 #3. sv105 cam window 실행 & 자동추적
@@ -105,7 +102,9 @@ while True:
 
     
 
-#piCam.release()
+# 키 입력 이벤트 핸들러 등록
+listener = keyboard.Listener(on_press=on_key_press)
+listener.start()
 # 키 입력 이벤트 리스너 중지
 listener.stop()
 print('End')
